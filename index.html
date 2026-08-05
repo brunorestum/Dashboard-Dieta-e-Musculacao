@@ -1,7 +1,3 @@
-Ocultamos os painéis de Treino e Cardio nas versões anteriores porque, quando você me mandou a foto de referência, pediu para deixar "exatamente como na imagem" — e nela só aparecia a parte de Nutrição! Achei que você quisesse focar apenas na dieta nessa visualização.
-Mas sem problemas, faz todo o sentido ter tudo junto. Já trouxe os painéis de Treino e Cardio de volta com toda a interatividade e os gráficos, usando os dados que você me mandou lá no início.
-Para os gráficos funcionarem direitinho direto no navegador, adicionei a biblioteca correspondente (Recharts) no cabeçalho do código.
-É só copiar este código completo e colar no seu index.html lá no GitHub, substituindo o anterior:
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -13,14 +9,16 @@ Para os gráficos funcionarem direitinho direto no navegador, adicionei a biblio
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   
-  <!-- Bibliotecas React -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Bibliotecas React Fixadas em Versões Estáveis -->
+  <script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/prop-types@15.8.1/prop-types.min.js"></script>
   
-  <!-- Biblioteca de Gráficos (Recharts) -->
-  <script crossorigin src="https://unpkg.com/prop-types@15.6.2/prop-types.min.js"></script>
-  <script crossorigin src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
+  <!-- Biblioteca de Gráficos (Recharts V2.1.12 - Compatível com HTML puro) -->
+  <script crossorigin src="https://unpkg.com/recharts@2.1.12/umd/Recharts.js"></script>
+  
+  <!-- Compilador Babel Fixado -->
+  <script crossorigin src="https://unpkg.com/@babel/standalone@7.22.13/babel.min.js"></script>
 
   <style>
     body {
@@ -37,10 +35,12 @@ Para os gráficos funcionarem direitinho direto no navegador, adicionei a biblio
 
   <script type="text/babel">
     const { useState, useMemo } = React;
-    const { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } = window.Recharts;
+    
+    // Garante que a biblioteca foi carregada corretamente
+    const { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } = window.Recharts || {};
 
     // ============================================================
-    // DADOS ATUALIZADOS (05/08)
+    // DADOS ATUALIZADOS (05/08 - CAFÉ E ALMOÇO)
     // ============================================================
 
     const META_VOCE = { proteina: 160, carbo: 205, gordura: 60, kcal: 2000 };
@@ -56,6 +56,7 @@ Para os gráficos funcionarem direitinho direto no navegador, adicionei a biblio
       { data: "05/08", alimento: "Azeite (3ml)", proteina: 0, carbo: 0, gordura: 2.8 },
       { data: "05/08", alimento: "Couve (30g)", proteina: 0.9, carbo: 1.2, gordura: 0.1 },
       { data: "05/08", alimento: "Bolo de cenoura c/ chocolate zero lac", proteina: 5, carbo: 42, gordura: 12 },
+      
       // 05/08 - Café da manhã
       { data: "05/08", alimento: "Pão francês", proteina: 4, carbo: 28, gordura: 1 },
       { data: "05/08", alimento: "3 ovos cozidos", proteina: 19.5, carbo: 2.4, gordura: 13.4 },
@@ -67,6 +68,7 @@ Para os gráficos funcionarem direitinho direto no navegador, adicionei a biblio
       { data: "05/08", alimento: "Abacate (1/8)", proteina: 0.3, carbo: 1.5, gordura: 2.1 },
       { data: "05/08", alimento: "SuperCoffee (1 dose)", proteina: 0.8, carbo: 3.8, gordura: 1.9 },
       { data: "05/08", alimento: "Café preto (300ml)", proteina: 0, carbo: 0, gordura: 0 },
+      
       // Registros anteriores
       { data: "04/08", alimento: "Pão francês", proteina: 4, carbo: 28, gordura: 1 },
       { data: "04/08", alimento: "3 ovos cozidos", proteina: 19.5, carbo: 2.4, gordura: 13.4 },
@@ -89,6 +91,7 @@ Para os gráficos funcionarem direitinho direto no navegador, adicionei a biblio
       { data: "05/08", alimento: "Salada verde (50g)", proteina: 0.7, carbo: 1.1, gordura: 0.1 },
       { data: "05/08", alimento: "Couve (30g)", proteina: 0.9, carbo: 1.2, gordura: 0.1 },
       { data: "05/08", alimento: "Bolo de cenoura c/ chocolate zero lac", proteina: 5, carbo: 42, gordura: 12 },
+
       // 05/08 - Café da manhã
       { data: "05/08", alimento: "Pão francês", proteina: 4, carbo: 28, gordura: 1 },
       { data: "05/08", alimento: "3 ovos cozidos", proteina: 19.5, carbo: 2.4, gordura: 13.4 },
@@ -98,6 +101,7 @@ Para os gráficos funcionarem direitinho direto no navegador, adicionei a biblio
       { data: "05/08", alimento: "PeptiStrong (1 dose)", proteina: 2.5, carbo: 2, gordura: 0.5 },
       { data: "05/08", alimento: "Creatina (1 dose)", proteina: 0, carbo: 0, gordura: 0 },
       { data: "05/08", alimento: "Abacate (1/8)", proteina: 0.3, carbo: 1.5, gordura: 2.1 },
+      
       // Registros anteriores
       { data: "04/08", alimento: "Pão francês", proteina: 4, carbo: 28, gordura: 1 },
       { data: "04/08", alimento: "3 ovos cozidos", proteina: 19.5, carbo: 2.4, gordura: 13.4 },
@@ -125,7 +129,7 @@ Para os gráficos funcionarem direitinho direto no navegador, adicionei a biblio
     ];
 
     const CARDIO_VOCE = [
-      { data: "04/08", atividade: "Esteira (Life Fitness, 3.27mi, MET 7.2)", minutos: 46.4, met: 7.2, kcalReal: 426 },
+      { data: "04/08", atividade: "Esteira (Life Fitness, MET 7.2)", minutos: 46, met: 7.2, kcalReal: 426 },
     ];
     
     const CARDIO_ESPOSA = [
@@ -302,6 +306,8 @@ Para os gráficos funcionarem direitinho direto no navegador, adicionei a biblio
     }
 
     function TreinoPanel({ titulo, dados, cor }) {
+      if (!window.Recharts) return null; // Evita quebrar se o gráfico não carregar
+
       const sessoes = useMemo(() => {
         const set = new Set(dados.map((d) => d.sessao || "Geral"));
         return Array.from(set);
@@ -410,6 +416,8 @@ Para os gráficos funcionarem direitinho direto no navegador, adicionei a biblio
     }
 
     function CardioPanel({ titulo, dados, cor, pesoKg }) {
+      if (!window.Recharts) return null;
+
       const dias = useMemo(() => {
         const seen = [];
         dados.forEach((d) => { if (!seen.includes(d.data)) seen.push(d.data); });
