@@ -9,15 +9,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   
-  <!-- Bibliotecas React Fixadas em Versões Estáveis -->
+  <!-- Dependências Estáveis para HTML Puro -->
   <script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/prop-types@15.8.1/prop-types.min.js"></script>
-  
-  <!-- Biblioteca de Gráficos (Recharts V2.1.12 - Compatível com HTML puro) -->
   <script crossorigin src="https://unpkg.com/recharts@2.1.12/umd/Recharts.js"></script>
-  
-  <!-- Compilador Babel Fixado -->
   <script crossorigin src="https://unpkg.com/@babel/standalone@7.22.13/babel.min.js"></script>
 
   <style>
@@ -35,19 +31,17 @@
 
   <script type="text/babel">
     const { useState, useMemo } = React;
-    
-    // Garante que a biblioteca foi carregada corretamente
     const { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } = window.Recharts || {};
 
     // ============================================================
-    // DADOS ATUALIZADOS (05/08 - CAFÉ E ALMOÇO)
+    // DADOS
     // ============================================================
 
     const META_VOCE = { proteina: 160, carbo: 205, gordura: 60, kcal: 2000 };
     const META_ESPOSA = { proteina: 110, carbo: 139, gordura: 45, kcal: 1400 };
 
     const ALIMENTOS_VOCE = [
-      // 05/08 - Almoço
+      // 05/08
       { data: "05/08", alimento: "Frango (120g)", proteina: 37, carbo: 0, gordura: 4.2 },
       { data: "05/08", alimento: "Legumes crus (100g)", proteina: 1.4, carbo: 8.4, gordura: 0.2 },
       { data: "05/08", alimento: "Aipim cozido (120g)", proteina: 0.7, carbo: 36, gordura: 0.4 },
@@ -56,8 +50,6 @@
       { data: "05/08", alimento: "Azeite (3ml)", proteina: 0, carbo: 0, gordura: 2.8 },
       { data: "05/08", alimento: "Couve (30g)", proteina: 0.9, carbo: 1.2, gordura: 0.1 },
       { data: "05/08", alimento: "Bolo de cenoura c/ chocolate zero lac", proteina: 5, carbo: 42, gordura: 12 },
-      
-      // 05/08 - Café da manhã
       { data: "05/08", alimento: "Pão francês", proteina: 4, carbo: 28, gordura: 1 },
       { data: "05/08", alimento: "3 ovos cozidos", proteina: 19.5, carbo: 2.4, gordura: 13.4 },
       { data: "05/08", alimento: "Melão (70g)", proteina: 0.35, carbo: 5.6, gordura: 0 },
@@ -68,31 +60,86 @@
       { data: "05/08", alimento: "Abacate (1/8)", proteina: 0.3, carbo: 1.5, gordura: 2.1 },
       { data: "05/08", alimento: "SuperCoffee (1 dose)", proteina: 0.8, carbo: 3.8, gordura: 1.9 },
       { data: "05/08", alimento: "Café preto (300ml)", proteina: 0, carbo: 0, gordura: 0 },
-      
-      // Registros anteriores
+
+      // 04/08
       { data: "04/08", alimento: "Pão francês", proteina: 4, carbo: 28, gordura: 1 },
       { data: "04/08", alimento: "3 ovos cozidos", proteina: 19.5, carbo: 2.4, gordura: 13.4 },
       { data: "04/08", alimento: "Melão (70g)", proteina: 0.35, carbo: 5.6, gordura: 0 },
       { data: "04/08", alimento: "Morango (30g)", proteina: 0.18, carbo: 2.1, gordura: 0 },
       { data: "04/08", alimento: "Chia (5g)", proteina: 0.8, carbo: 2, gordura: 1.5 },
       { data: "04/08", alimento: "Livestrong/PeptiStrong (1 dose)", proteina: 2.5, carbo: 2, gordura: 0.5 },
+      { data: "04/08", alimento: "SuperCoffee (1 dose)", proteina: 0.8, carbo: 3.8, gordura: 1.9 },
       { data: "04/08", alimento: "Whey (1 scoop)", proteina: 22, carbo: 3.9, gordura: 2.3 },
+      { data: "04/08", alimento: "Banana", proteina: 1.4, carbo: 23.8, gordura: 0.1 },
+      { data: "04/08", alimento: "Morango (85g)", proteina: 0.5, carbo: 6, gordura: 0 },
       { data: "04/08", alimento: "Peixe tilápia grelhado (85g)", proteina: 17.1, carbo: 0, gordura: 1.4 },
+      { data: "04/08", alimento: "Frango grelhado (55g)", proteina: 17.3, carbo: 0, gordura: 1.9 },
       { data: "04/08", alimento: "Aipim cozido (166g)", proteina: 1, carbo: 50, gordura: 0.5 },
+      { data: "04/08", alimento: "Legumes crus (cenoura, pimentão)", proteina: 1.2, carbo: 7, gordura: 0.2 },
+      { data: "04/08", alimento: "Salada verde (100g)", proteina: 1.4, carbo: 2.2, gordura: 0.2 },
       { data: "04/08", alimento: "Brownie caseiro (1/4 da receita, com whey)", proteina: 22, carbo: 22.1, gordura: 11.5 },
+      { data: "04/08", alimento: "Banana", proteina: 1.4, carbo: 23.8, gordura: 0.1 },
+      { data: "04/08", alimento: "Morango (50g)", proteina: 0.3, carbo: 3.5, gordura: 0 },
+      { data: "04/08", alimento: "Frango grelhado (110g)", proteina: 34.9, carbo: 0, gordura: 3.9 },
+      { data: "04/08", alimento: "Queijo mandala zero lactose (10g)", proteina: 2.5, carbo: 0.19, gordura: 3.9 },
+      { data: "04/08", alimento: "Alface, cenoura e tomate cereja (50g)", proteina: 0.6, carbo: 2.5, gordura: 0.1 },
+      { data: "04/08", alimento: "Azeite (1,5ml)", proteina: 0, carbo: 0, gordura: 1.4 },
+      { data: "04/08", alimento: "Chocolate Nugali (12,5g)", proteina: 1.14, carbo: 4.6, gordura: 4.9 },
+      { data: "04/08", alimento: "Melão (110g)", proteina: 0.55, carbo: 8.8, gordura: 0 },
+      { data: "04/08", alimento: "Iogurte (80g)", proteina: 9.2, carbo: 2.4, gordura: 0 },
+      { data: "04/08", alimento: "Cacau em pó 100% (3g)", proteina: 0.72, carbo: 0.57, gordura: 0.36 },
+      { data: "04/08", alimento: "Castanha do Pará (7g)", proteina: 1, carbo: 1.1, gordura: 4.4 },
+      
+      // 03/08
       { data: "03/08", alimento: "3 ovos", proteina: 19.5, carbo: 2.4, gordura: 13.4 },
-      { data: "03/08", alimento: "Pão francês", proteina: 4, carbo: 28, gordura: 1 }
+      { data: "03/08", alimento: "Pão francês", proteina: 4, carbo: 28, gordura: 1 },
+      { data: "03/08", alimento: "SuperCoffee (1 dose)", proteina: 0.8, carbo: 3.8, gordura: 1.9 },
+      { data: "03/08", alimento: "Livestrong/PeptiStrong (1 dose)", proteina: 2.5, carbo: 2, gordura: 0.5 },
+      { data: "03/08", alimento: "Abacate (1/4, ~50g)", proteina: 0.6, carbo: 3, gordura: 4.2 },
+      { data: "03/08", alimento: "Melão (80g)", proteina: 0.4, carbo: 6.4, gordura: 0 },
+      { data: "03/08", alimento: "Chia (5g)", proteina: 0.8, carbo: 2, gordura: 1.5 },
+      { data: "03/08", alimento: "Castanha do Pará (5g)", proteina: 0.7, carbo: 0.8, gordura: 3.2 },
+      { data: "03/08", alimento: "Peito de frango grelhado (110g)", proteina: 34.9, carbo: 0, gordura: 3.9 },
+      { data: "03/08", alimento: "Aipim cozido (126g)", proteina: 0.8, carbo: 37.9, gordura: 0.4 },
+      { data: "03/08", alimento: "Batata doce cozida (54g)", proteina: 0.4, carbo: 9.9, gordura: 0.05 },
+      { data: "03/08", alimento: "Legumes crus (cenoura, rabanete, pimentão)", proteina: 1.4, carbo: 8.4, gordura: 0.2 },
+      { data: "03/08", alimento: "Alface (100g)", proteina: 1.4, carbo: 2.2, gordura: 0.2 },
+      { data: "03/08", alimento: "Banana", proteina: 1.4, carbo: 23.8, gordura: 0.1 },
+      { data: "03/08", alimento: "Brownie caseiro (1/4 da receita, com whey)", proteina: 22, carbo: 22.1, gordura: 11.5 },
+      { data: "03/08", alimento: "Morango (50g)", proteina: 0.3, carbo: 3.5, gordura: 0 },
+      { data: "03/08", alimento: "Wrap integral Sun (40g)", proteina: 3.7, carbo: 16, gordura: 2.4 },
+      { data: "03/08", alimento: "Frango desfiado (120g)", proteina: 38.1, carbo: 0, gordura: 4.3 },
+      { data: "03/08", alimento: "Alface e tomate (80g)", proteina: 1, carbo: 3, gordura: 0.1 },
+      { data: "03/08", alimento: "Whey batido + banana + morango", proteina: 23.7, carbo: 31.2, gordura: 2.4 },
+      
+      // 02/08
+      { data: "02/08", alimento: "Pão francês", proteina: 4, carbo: 28, gordura: 1 },
+      { data: "02/08", alimento: "3 ovos", proteina: 18, carbo: 1, gordura: 15 },
+      { data: "02/08", alimento: "Melão (100g)", proteina: 0.5, carbo: 8, gordura: 0 },
+      { data: "02/08", alimento: "Morango", proteina: 0.3, carbo: 3.5, gordura: 0 },
+      { data: "02/08", alimento: "Chia (5g)", proteina: 0.8, carbo: 2, gordura: 1.5 },
+      { data: "02/08", alimento: "Pão de queijo", proteina: 2, carbo: 12, gordura: 6 },
+      { data: "02/08", alimento: "SuperCoffee (1 dose)", proteina: 0.8, carbo: 3.8, gordura: 1.9 },
+      { data: "02/08", alimento: "PeptiStrong (1 dose)", proteina: 2.5, carbo: 2, gordura: 0.5 },
+      { data: "02/08", alimento: "Lombo suíno grelhado (110g)", proteina: 39.3, carbo: 0, gordura: 7 },
+      { data: "02/08", alimento: "Batata doce (110g)", proteina: 0.7, carbo: 20.2, gordura: 0.1 },
+      { data: "02/08", alimento: "Legumes mistos (165g)", proteina: 3, carbo: 12, gordura: 0.3 },
+      { data: "02/08", alimento: "Salada leve (165g)", proteina: 1.5, carbo: 6, gordura: 0.1 },
+      { data: "02/08", alimento: "Azeite (legumes e salada)", proteina: 0, carbo: 0, gordura: 4.5 },
+      { data: "02/08", alimento: "Brownie caseiro (1/4 da receita, com whey)", proteina: 22, carbo: 22.1, gordura: 11.5 },
+      { data: "02/08", alimento: "Melão (100g) + Whey (1 scoop)", proteina: 22.5, carbo: 11.9, gordura: 2.3 },
+      { data: "02/08", alimento: "Jantar: frango, ovo, farinha grão-bico, queijo, tomate", proteina: 34.9, carbo: 9.05, gordura: 11.5 },
+      { data: "02/08", alimento: "Atum em lata (120g, ceia)", proteina: 32, carbo: 0, gordura: 1.3 },
+      { data: "02/08", alimento: "Wrap de espinafre (1 unidade, 40g)", proteina: 1.7, carbo: 19, gordura: 1 },
     ];
 
     const ALIMENTOS_ESPOSA = [
-      // 05/08 - Almoço
+      // 05/08
       { data: "05/08", alimento: "Frango (110g)", proteina: 34.1, carbo: 0, gordura: 3.8 },
       { data: "05/08", alimento: "Purê de batata baroa (60g)", proteina: 0.6, carbo: 10.8, gordura: 1.2 },
       { data: "05/08", alimento: "Salada verde (50g)", proteina: 0.7, carbo: 1.1, gordura: 0.1 },
       { data: "05/08", alimento: "Couve (30g)", proteina: 0.9, carbo: 1.2, gordura: 0.1 },
       { data: "05/08", alimento: "Bolo de cenoura c/ chocolate zero lac", proteina: 5, carbo: 42, gordura: 12 },
-
-      // 05/08 - Café da manhã
       { data: "05/08", alimento: "Pão francês", proteina: 4, carbo: 28, gordura: 1 },
       { data: "05/08", alimento: "3 ovos cozidos", proteina: 19.5, carbo: 2.4, gordura: 13.4 },
       { data: "05/08", alimento: "Melão (70g)", proteina: 0.35, carbo: 5.6, gordura: 0 },
@@ -101,37 +148,108 @@
       { data: "05/08", alimento: "PeptiStrong (1 dose)", proteina: 2.5, carbo: 2, gordura: 0.5 },
       { data: "05/08", alimento: "Creatina (1 dose)", proteina: 0, carbo: 0, gordura: 0 },
       { data: "05/08", alimento: "Abacate (1/8)", proteina: 0.3, carbo: 1.5, gordura: 2.1 },
-      
-      // Registros anteriores
+
+      // 04/08
       { data: "04/08", alimento: "Pão francês", proteina: 4, carbo: 28, gordura: 1 },
       { data: "04/08", alimento: "3 ovos cozidos", proteina: 19.5, carbo: 2.4, gordura: 13.4 },
+      { data: "04/08", alimento: "Melão (70g)", proteina: 0.35, carbo: 5.6, gordura: 0 },
+      { data: "04/08", alimento: "Morango (30g)", proteina: 0.18, carbo: 2.1, gordura: 0 },
+      { data: "04/08", alimento: "Chia (5g)", proteina: 0.8, carbo: 2, gordura: 1.5 },
+      { data: "04/08", alimento: "Livestrong/PeptiStrong (1 dose)", proteina: 2.5, carbo: 2, gordura: 0.5 },
       { data: "04/08", alimento: "Frango grelhado (110g)", proteina: 34.9, carbo: 0, gordura: 3.9 },
       { data: "04/08", alimento: "Aipim cozido (~120g)", proteina: 0.7, carbo: 36.1, gordura: 0.4 },
-      { data: "04/08", alimento: "Body Protein Cacau (1 dose)", proteina: 15, carbo: 0, gordura: 0 },
-      { data: "03/08", alimento: "3 ovos", proteina: 19.5, carbo: 2.4, gordura: 13.4 }
+      { data: "04/08", alimento: "Legumes crus (cenoura, pimentão)", proteina: 1, carbo: 5.6, gordura: 0.2 },
+      { data: "04/08", alimento: "Salada verde (rabanete, tomate, palmito)", proteina: 1.2, carbo: 3.5, gordura: 0.2 },
+      { data: "04/08", alimento: "Cacau em pó 100% (2g)", proteina: 0.48, carbo: 0.38, gordura: 0.24 },
+      { data: "04/08", alimento: "Castanha do Pará (4g)", proteina: 0.6, carbo: 0.6, gordura: 2.5 },
+      { data: "04/08", alimento: "Morango (35g)", proteina: 0.2, carbo: 2.5, gordura: 0 },
+      { data: "04/08", alimento: "Melão (65g)", proteina: 0.3, carbo: 5.2, gordura: 0 },
+      { data: "04/08", alimento: "Body Protein Cacau (1 dose, 20g)", proteina: 15, carbo: 0, gordura: 0 },
+      { data: "04/08", alimento: "Frango grelhado (110g)", proteina: 34.9, carbo: 0, gordura: 3.9 },
+      { data: "04/08", alimento: "Queijo mandala zero lactose (10g)", proteina: 2.5, carbo: 0.19, gordura: 3.9 },
+      { data: "04/08", alimento: "Alface, cenoura e tomate cereja (50g)", proteina: 0.6, carbo: 2.5, gordura: 0.1 },
+      { data: "04/08", alimento: "Azeite (1,5ml)", proteina: 0, carbo: 0, gordura: 1.4 },
+      { data: "04/08", alimento: "Chocolate Nugali (12,5g)", proteina: 1.14, carbo: 4.6, gordura: 4.9 },
+      { data: "04/08", alimento: "Melão (110g)", proteina: 0.55, carbo: 8.8, gordura: 0 },
+      
+      // 03/08
+      { data: "03/08", alimento: "3 ovos", proteina: 19.5, carbo: 2.4, gordura: 13.4 },
+      { data: "03/08", alimento: "Pão francês", proteina: 4, carbo: 28, gordura: 1 },
+      { data: "03/08", alimento: "Livestrong/PeptiStrong (1 dose)", proteina: 2.5, carbo: 2, gordura: 0.5 },
+      { data: "03/08", alimento: "Abacate (1/4, ~50g)", proteina: 0.6, carbo: 3, gordura: 4.2 },
+      { data: "03/08", alimento: "Melão (80g)", proteina: 0.4, carbo: 6.4, gordura: 0 },
+      { data: "03/08", alimento: "Chia (5g)", proteina: 0.8, carbo: 2, gordura: 1.5 },
+      { data: "03/08", alimento: "Peito de frango grelhado (110g)", proteina: 34.9, carbo: 0, gordura: 3.9 },
+      { data: "03/08", alimento: "Aipim cozido (100g)", proteina: 0.6, carbo: 30.1, gordura: 0.3 },
+      { data: "03/08", alimento: "Legumes crus (cenoura, rabanete, pimentão)", proteina: 0.1, carbo: 0.7, gordura: 0.02 },
+      { data: "03/08", alimento: "Salada (alface)", proteina: 1.1, carbo: 1.8, gordura: 0.2 },
+      { data: "03/08", alimento: "3 ovos", proteina: 19.5, carbo: 2.4, gordura: 13.4 },
+      { data: "03/08", alimento: "Pão sírio integral (50g)", proteina: 5.9, carbo: 34, gordura: 1.6 },
+      { data: "03/08", alimento: "Presunto de Parma (1 fatia, ~12g)", proteina: 4.2, carbo: 0, gordura: 1.5 },
+      { data: "03/08", alimento: "Chocolate de cupuaçu (7g)", proteina: 0.4, carbo: 3.4, gordura: 2.5 },
+      
+      // 02/08
+      { data: "02/08", alimento: "Pão francês", proteina: 4, carbo: 28, gordura: 1 },
+      { data: "02/08", alimento: "3 ovos", proteina: 18, carbo: 1, gordura: 15 },
+      { data: "02/08", alimento: "Melão (100g)", proteina: 0.5, carbo: 8, gordura: 0 },
+      { data: "02/08", alimento: "Morango", proteina: 0.3, carbo: 3.5, gordura: 0 },
+      { data: "02/08", alimento: "Chia (5g)", proteina: 0.8, carbo: 2, gordura: 1.5 },
+      { data: "02/08", alimento: "Pão de queijo", proteina: 2, carbo: 12, gordura: 6 },
+      { data: "02/08", alimento: "SuperCoffee (1 dose)", proteina: 0.8, carbo: 3.8, gordura: 1.9 },
+      { data: "02/08", alimento: "PeptiStrong (1 dose)", proteina: 2.5, carbo: 2, gordura: 0.5 },
+      { data: "02/08", alimento: "Lombo suíno grelhado (110g)", proteina: 39.3, carbo: 0, gordura: 7 },
+      { data: "02/08", alimento: "Batata doce (110g)", proteina: 0.7, carbo: 20.2, gordura: 0.1 },
+      { data: "02/08", alimento: "Legumes assados (90g)", proteina: 1.6, carbo: 6.5, gordura: 0.2 },
+      { data: "02/08", alimento: "Salada leve (90g)", proteina: 0.8, carbo: 3.3, gordura: 0.1 },
+      { data: "02/08", alimento: "Azeite (legumes e salada)", proteina: 0, carbo: 0, gordura: 3 },
+      { data: "02/08", alimento: "Brownie caseiro (1/4 da receita, com whey)", proteina: 22, carbo: 22.1, gordura: 11.5 },
+      { data: "02/08", alimento: "Melão (100g) + Whey (1 scoop)", proteina: 22.5, carbo: 11.9, gordura: 2.3 },
+      { data: "02/08", alimento: "Jantar: frango, ovo, farinha grão-bico, queijo, tomate", proteina: 34.9, carbo: 9.05, gordura: 11.5 },
     ];
 
     const TREINO_VOCE = [
       { data: "01/08", sessao: "Costas e Bíceps", exercicio: "Puxada por cima pegada aberta", carga: 70 },
+      { data: "01/08", sessao: "Costas e Bíceps", exercicio: "Puxada por cima pegada fechada", carga: 70 },
+      { data: "01/08", sessao: "Costas e Bíceps", exercicio: "Puxada sentada", carga: 72.5 },
+      { data: "01/08", sessao: "Costas e Bíceps", exercicio: "Remada sentada", carga: 70 },
+      { data: "01/08", sessao: "Costas e Bíceps", exercicio: "Bíceps máquina corda", carga: 9, unidade: "pinos" },
       { data: "01/08", sessao: "Costas e Bíceps", exercicio: "Bíceps rosca", carga: 14 },
       { data: "02/08", sessao: "Quadríceps", exercicio: "Agachamento máquina", carga: 60, unidade: "lbs" },
       { data: "02/08", sessao: "Quadríceps", exercicio: "Leg press do chão", carga: 80, unidade: "lbs" },
+      { data: "02/08", sessao: "Quadríceps", exercicio: "Cadeira extensora", carga: 130, unidade: "lbs" },
+      { data: "02/08", sessao: "Quadríceps", exercicio: "Búlgaro", carga: 8 },
+      { data: "02/08", sessao: "Quadríceps", exercicio: "Cadeira adutora", carga: 8, unidade: "pinos grandes" },
+      { data: "02/08", sessao: "Quadríceps", exercicio: "Panturrilha", carga: 45, unidade: "lbs" },
+      { data: "02/08", sessao: "Quadríceps", exercicio: "Stiff", carga: 30 },
       { data: "03/08", sessao: "Upper", exercicio: "Máquina ombro elevação", carga: 70, unidade: "lbs" },
+      { data: "03/08", sessao: "Upper", exercicio: "Máquina ombro arco", carga: 65, unidade: "lbs" },
+      { data: "03/08", sessao: "Upper", exercicio: "Máquina peito arco", carga: 65, unidade: "lbs" },
+      { data: "03/08", sessao: "Upper", exercicio: "Bíceps curl unilateral", carga: 20, unidade: "lbs" },
       { data: "03/08", sessao: "Upper", exercicio: "Tríceps máquina", carga: 125, unidade: "lbs" },
+      { data: "03/08", sessao: "Upper", exercicio: "Bíceps barra livre", carga: 30 },
+      { data: "03/08", sessao: "Upper", exercicio: "Tríceps francês na polia", carga: 24 },
     ];
 
     const TREINO_ESPOSA_NOME = "Raissa";
     const TREINO_ESPOSA = [
       { data: "01/08", sessao: "Costas e Bíceps", exercicio: "Puxada por cima pegada aberta", carga: 30 },
+      { data: "01/08", sessao: "Costas e Bíceps", exercicio: "Puxada por cima pegada fechada", carga: 30 },
+      { data: "01/08", sessao: "Costas e Bíceps", exercicio: "Puxada sentada", carga: 27.5 },
+      { data: "01/08", sessao: "Costas e Bíceps", exercicio: "Remada sentada", carga: 30 },
+      { data: "01/08", sessao: "Costas e Bíceps", exercicio: "Bíceps máquina corda", carga: 4, unidade: "pinos" },
       { data: "01/08", sessao: "Costas e Bíceps", exercicio: "Bíceps rosca", carga: 5 },
       { data: "02/08", sessao: "Quadríceps", exercicio: "Agachamento máquina", carga: 105, unidade: "lbs" },
       { data: "02/08", sessao: "Quadríceps", exercicio: "Leg press do chão", carga: 125, unidade: "lbs" },
+      { data: "02/08", sessao: "Quadríceps", exercicio: "Cadeira extensora", carga: 180, unidade: "lbs" },
+      { data: "02/08", sessao: "Quadríceps", exercicio: "Búlgaro", carga: 12 },
+      { data: "02/08", sessao: "Quadríceps", exercicio: "Cadeira adutora", carga: 4, unidade: "pinos grandes" },
+      { data: "02/08", sessao: "Quadríceps", exercicio: "Panturrilha", carga: 20, unidade: "lbs" },
+      { data: "02/08", sessao: "Quadríceps", exercicio: "Stiff", carga: 30 },
     ];
 
     const CARDIO_VOCE = [
-      { data: "04/08", atividade: "Esteira (Life Fitness, MET 7.2)", minutos: 46, met: 7.2, kcalReal: 426 },
+      { data: "04/08", atividade: "Esteira (Life Fitness, 3.27mi, MET 7.2)", minutos: 46.4, met: 7.2, kcalReal: 426 },
     ];
-    
     const CARDIO_ESPOSA = [
       { data: "02/08", atividade: "Caminhada 5,5 km/h", minutos: 40, met: 5.3 },
       { data: "03/08", atividade: "Esteira 5,5 km/h", minutos: 45, met: 5.3 },
@@ -139,14 +257,21 @@
     ];
 
     // ============================================================
-    // LÓGICA E UI
+    // CONFIGURAÇÕES E ESTILOS
     // ============================================================
 
     const COLORS = {
-      bg: "#12110F", panel: "#1B1917", panelBorder: "#2C2924",
-      cream: "#F4EFE6", muted: "#9A9184",
-      protein: "#E8A458", carb: "#7FA88F", fat: "#C97B63",
-      voce: "#E8A458", esposa: "#7FA88F", track: "#2C2924",
+      bg: "#12110F",
+      panel: "#1B1917",
+      panelBorder: "#2C2924",
+      cream: "#F4EFE6",
+      muted: "#9A9184",
+      protein: "#E8A458",
+      carb: "#7FA88F",
+      fat: "#C97B63",
+      voce: "#E8A458",
+      esposa: "#7FA88F",
+      track: "#2C2924",
     };
 
     const PESO_USUARIO_KG = 69.4;
@@ -166,39 +291,72 @@
       return mes * 100 + dia;
     }
 
-    function EmptyState({ text }) {
-      return (
-        <div style={{ padding: "32px 16px", textAlign: "center", color: COLORS.muted, fontSize: 13, border: `1px dashed ${COLORS.panelBorder}`, borderRadius: 10, marginTop: 16 }}>
-          {text}
-        </div>
-      );
+    const MET_MUSCULACAO = 4.5;
+    const DURACAO_SESSAO_HORAS = 1;
+
+    function kcalMusculacaoSessao(pesoKg, horas = DURACAO_SESSAO_HORAS) {
+      return Math.round(MET_MUSCULACAO * pesoKg * horas);
     }
+
+    const KCAL_MEDIDAS_TREINO = [
+      { data: "03/08", sessao: "Upper", pessoa: "voce", kcal: 354 },
+    ];
+
+    function buscarKcalMedida(data, sessao, pessoa) {
+      const registro = KCAL_MEDIDAS_TREINO.find(
+        (k) => k.data === data && k.sessao === sessao && k.pessoa === pessoa
+      );
+      return registro ? registro.kcal : null;
+    }
+
+    // ============================================================
+    // COMPONENTES DE UI
+    // ============================================================
 
     function RingStat({ label, value, meta, unit, color }) {
       const pct = Math.min(100, (value / meta) * 100);
-      const r = 38;
+      const r = 42;
       const circ = 2 * Math.PI * r;
       const offset = circ - (pct / 100) * circ;
       const over = value > meta;
 
       return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-          <div style={{ position: "relative", width: 90, height: 90 }}>
-            <svg width="90" height="90" viewBox="0 0 90 90" style={{ transform: "rotate(-90deg)" }}>
-              <circle cx="45" cy="45" r={r} fill="none" stroke={COLORS.track} strokeWidth="6" />
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+          <div style={{ position: "relative", width: 100, height: 100 }}>
+            <svg width="100" height="100" viewBox="0 0 100 100" style={{ transform: "rotate(-90deg)" }}>
+              <circle cx="50" cy="50" r={r} fill="none" stroke={COLORS.track} strokeWidth="7" />
               <circle
-                cx="45" cy="45" r={r} fill="none"
-                stroke={over ? "#C97B63" : color} strokeWidth="6"
-                strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round"
+                cx="50"
+                cy="50"
+                r={r}
+                fill="none"
+                stroke={over ? "#C97B63" : color}
+                strokeWidth="7"
+                strokeDasharray={circ}
+                strokeDashoffset={offset}
+                strokeLinecap="round"
                 style={{ transition: "stroke-dashoffset 0.6s ease" }}
               />
             </svg>
-            <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-              <span style={{ fontSize: 18, fontWeight: 700, color: COLORS.cream, fontFamily: "'Fraunces', serif" }}>{value}</span>
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <span style={{ fontSize: 20, fontWeight: 700, color: COLORS.cream, fontFamily: "'Fraunces', serif" }}>
+                {value}
+              </span>
               <span style={{ fontSize: 10, color: COLORS.muted }}>/{meta}{unit}</span>
             </div>
           </div>
-          <span style={{ fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase", color: COLORS.muted }}>{label}</span>
+          <span style={{ fontSize: 12, letterSpacing: "0.08em", textTransform: "uppercase", color: COLORS.muted }}>
+            {label}
+          </span>
         </div>
       );
     }
@@ -211,20 +369,20 @@
       const kcal = kcalFromMacro(proteina, carbo, gordura);
 
       return (
-        <div style={{ marginBottom: 16 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-            <span style={{ fontSize: 13, color: COLORS.cream, fontWeight: 500 }}>{alimento}</span>
+        <div style={{ marginBottom: 14 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
+            <span style={{ fontSize: 13, color: COLORS.cream }}>{alimento}</span>
             <span style={{ fontSize: 12, color: COLORS.muted }}>{kcal} kcal</span>
           </div>
-          <div style={{ display: "flex", height: 6, borderRadius: 3, overflow: "hidden", background: COLORS.track }}>
+          <div style={{ display: "flex", height: 8, borderRadius: 4, overflow: "hidden", background: COLORS.track }}>
             {pP > 0 && <div style={{ width: `${pP}%`, background: COLORS.protein }} />}
             {pC > 0 && <div style={{ width: `${pC}%`, background: COLORS.carb }} />}
             {pG > 0 && <div style={{ width: `${pG}%`, background: COLORS.fat }} />}
           </div>
-          <div style={{ display: "flex", gap: 12, marginTop: 6 }}>
-            <span style={{ fontSize: 11, color: COLORS.protein, fontWeight: 600 }}>P {proteina}g</span>
-            <span style={{ fontSize: 11, color: COLORS.carb, fontWeight: 600 }}>C {carbo}g</span>
-            <span style={{ fontSize: 11, color: COLORS.fat, fontWeight: 600 }}>G {gordura}g</span>
+          <div style={{ display: "flex", gap: 10, marginTop: 4 }}>
+            <span style={{ fontSize: 11, color: COLORS.protein }}>P {proteina}g</span>
+            <span style={{ fontSize: 11, color: COLORS.carb }}>C {carbo}g</span>
+            <span style={{ fontSize: 11, color: COLORS.fat }}>G {gordura}g</span>
           </div>
         </div>
       );
@@ -233,11 +391,13 @@
     function MacrosPanel({ titulo, alimentos, meta }) {
       const dias = useMemo(() => {
         const seen = [];
-        alimentos.forEach((a) => { if (!seen.includes(a.data)) seen.push(a.data); });
+        alimentos.forEach((a) => {
+          if (!seen.includes(a.data)) seen.push(a.data);
+        });
         return seen.sort((a, b) => dataParaOrdenar(a) - dataParaOrdenar(b));
       }, [alimentos]);
 
-      const [diaSelecionado, setDiaSelecionado] = useState("05/08");
+      const [diaSelecionado, setDiaSelecionado] = useState(dias[dias.length - 1] || null);
       const diaValido = dias.includes(diaSelecionado) ? diaSelecionado : dias[dias.length - 1];
 
       const alimentosDoDia = alimentos
@@ -249,71 +409,129 @@
       const c = alimentosDoDia.reduce((s, a) => s + a.carbo, 0);
       const g = alimentosDoDia.reduce((s, a) => s + a.gordura, 0);
       const kcal = kcalFromMacro(p, c, g);
+      const kcalMeta = meta.kcal;
+
+      const chartData = dias.map((d) => {
+        const itens = alimentos.filter((a) => a.data === d);
+        const dp = itens.reduce((s, a) => s + a.proteina, 0);
+        const dc = itens.reduce((s, a) => s + a.carbo, 0);
+        const dg = itens.reduce((s, a) => s + a.gordura, 0);
+        return { data: d, kcal: kcalFromMacro(dp, dc, dg), meta: kcalMeta };
+      });
 
       return (
-        <div style={{ background: COLORS.panel, border: `1px solid ${COLORS.panelBorder}`, borderRadius: 16, padding: 24 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+        <div style={panelStyle}>
+          <div style={panelHeader}>
             <div>
-              <div style={{ fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: COLORS.muted, marginBottom: 4 }}>Nutrição</div>
-              <h2 style={{ fontSize: 22, fontWeight: 600, color: COLORS.cream, fontFamily: "'Fraunces', serif", margin: 0 }}>{titulo}</h2>
+              <div style={eyebrow}>Nutrição</div>
+              <h2 style={panelTitle}>{titulo}</h2>
             </div>
             <div style={{ textAlign: "right" }}>
-              <div style={{ fontSize: 26, fontWeight: 700, color: COLORS.cream, fontFamily: "'Fraunces', serif" }}>
+              <div style={{ fontSize: 28, fontWeight: 700, color: COLORS.cream, fontFamily: "'Fraunces', serif" }}>
                 {kcal}
-                <span style={{ fontSize: 13, color: COLORS.muted, fontWeight: 400, fontFamily: "'Inter', sans-serif" }}> / {meta.kcal} kcal</span>
+                <span style={{ fontSize: 14, color: COLORS.muted, fontWeight: 400 }}> / {kcalMeta} kcal</span>
               </div>
             </div>
           </div>
 
-          {dias.length > 0 && (
+          {dias.length === 0 ? (
+            <EmptyState text="Nenhum registro ainda." />
+          ) : (
             <>
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 16 }}>
-                {dias.map((d) => (
-                  <button
-                    key={d} onClick={() => setDiaSelecionado(d)}
-                    style={{
-                      padding: "6px 14px", borderRadius: 20,
-                      border: `1px solid ${d === diaValido ? COLORS.protein : COLORS.panelBorder}`,
-                      background: d === diaValido ? `${COLORS.protein}11` : "transparent",
-                      color: d === diaValido ? COLORS.cream : COLORS.muted,
-                      fontSize: 12, fontWeight: d === diaValido ? 600 : 400,
-                      cursor: "pointer", fontFamily: "inherit", transition: "all 0.2s ease"
-                    }}
-                  >
-                    {d}
-                  </button>
-                ))}
-              </div>
+              {dias.length > 1 && (
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 16 }}>
+                  {dias.map((d) => (
+                    <button
+                      key={d}
+                      onClick={() => setDiaSelecionado(d)}
+                      style={{
+                        padding: "6px 12px",
+                        borderRadius: 20,
+                        border: `1px solid ${d === diaValido ? COLORS.protein : COLORS.panelBorder}`,
+                        background: d === diaValido ? `${COLORS.protein}22` : "transparent",
+                        color: d === diaValido ? COLORS.cream : COLORS.muted,
+                        fontSize: 12,
+                        cursor: "pointer",
+                        fontFamily: "inherit",
+                      }}
+                    >
+                      {d}
+                    </button>
+                  ))}
+                </div>
+              )}
 
-              <div style={{ display: "flex", justifyContent: "space-between", padding: "28px 0" }}>
+              <div style={{ display: "flex", justifyContent: "space-around", padding: "24px 0" }}>
                 <RingStat label="Proteína" value={Math.round(p * 10) / 10} meta={meta.proteina} unit="g" color={COLORS.protein} />
                 <RingStat label="Carboidrato" value={Math.round(c * 10) / 10} meta={meta.carbo} unit="g" color={COLORS.carb} />
                 <RingStat label="Gordura" value={Math.round(g * 10) / 10} meta={meta.gordura} unit="g" color={COLORS.fat} />
               </div>
 
-              <div style={{ marginTop: 8 }}>
-                <div style={{ fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: COLORS.muted, marginBottom: 16 }}>Contribuição por alimento</div>
-                <div>
+              <div style={{ marginTop: 4 }}>
+                <div style={eyebrow}>Contribuição por alimento</div>
+                <div style={{ marginTop: 12 }}>
                   {alimentosDoDia.map((a, i) => (
                     <BarraContribuicao key={i} alimento={a.alimento} proteina={a.proteina} carbo={a.carbo} gordura={a.gordura} />
                   ))}
                 </div>
               </div>
+
+              {chartData.length > 1 && window.Recharts && (
+                <div style={{ height: 160, marginTop: 16 }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={chartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+                      <CartesianGrid stroke={COLORS.panelBorder} strokeDasharray="3 3" vertical={false} />
+                      <XAxis dataKey="data" stroke={COLORS.muted} fontSize={11} tickLine={false} axisLine={false} />
+                      <YAxis stroke={COLORS.muted} fontSize={11} tickLine={false} axisLine={false} />
+                      <Tooltip
+                        contentStyle={{ background: COLORS.panel, border: `1px solid ${COLORS.panelBorder}`, borderRadius: 8 }}
+                        labelStyle={{ color: COLORS.cream }}
+                      />
+                      <Line type="monotone" dataKey="kcal" stroke={COLORS.protein} strokeWidth={2} dot={{ r: 3 }} name="Kcal consumidas" />
+                      <Line type="monotone" dataKey="meta" stroke={COLORS.muted} strokeWidth={1.5} strokeDasharray="4 4" dot={false} name="Meta" />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
             </>
           )}
         </div>
       );
     }
 
-    function TreinoPanel({ titulo, dados, cor }) {
-      if (!window.Recharts) return null; // Evita quebrar se o gráfico não carregar
+    function EmptyState({ text }) {
+      return (
+        <div
+          style={{
+            padding: "40px 20px",
+            textAlign: "center",
+            color: COLORS.muted,
+            fontSize: 13,
+            border: `1px dashed ${COLORS.panelBorder}`,
+            borderRadius: 10,
+            marginTop: 12,
+          }}
+        >
+          {text}
+        </div>
+      );
+    }
 
+    function TreinoPanel({ titulo, dados, cor, pesoKg, pessoa }) {
       const sessoes = useMemo(() => {
         const set = new Set(dados.map((d) => d.sessao || "Geral"));
         return Array.from(set);
       }, [dados]);
 
-      const [sessaoSelecionada, setSessaoSelecionada] = useState(sessoes[0] || null);
+      const sessaoMaisRecente = useMemo(() => {
+        if (!dados.length) return sessoes[0] || null;
+        const maisRecente = dados.reduce((max, d) =>
+          dataParaOrdenar(d.data) > dataParaOrdenar(max.data) ? d : max
+        );
+        return maisRecente.sessao || "Geral";
+      }, [dados, sessoes]);
+
+      const [sessaoSelecionada, setSessaoSelecionada] = useState(sessaoMaisRecente);
 
       const dadosDaSessao = useMemo(
         () => dados.filter((d) => (d.sessao || "Geral") === sessaoSelecionada),
@@ -332,55 +550,87 @@
         .filter((d) => d.exercicio === exercicioValido)
         .slice()
         .sort((a, b) => dataParaOrdenar(a.data) - dataParaOrdenar(b.data));
-        
       const unidade = serieProgresso.length ? (serieProgresso[0].unidade || "kg") : "kg";
       const cargaAtual = serieProgresso.length ? serieProgresso[serieProgresso.length - 1].carga : null;
+      const cargaInicial = serieProgresso.length ? serieProgresso[0].carga : null;
+      const progresso = cargaAtual && cargaInicial ? (((cargaAtual - cargaInicial) / cargaInicial) * 100).toFixed(1) : null;
 
       const trocarSessao = (s) => {
         setSessaoSelecionada(s);
         setExercicioProgresso(null);
       };
 
+      const ultimaData = dadosDaSessao.length
+        ? dadosDaSessao.reduce((max, d) => (dataParaOrdenar(d.data) > dataParaOrdenar(max.data) ? d : max)).data
+        : null;
+      const kcalMedida = ultimaData ? buscarKcalMedida(ultimaData, sessaoSelecionada, pessoa) : null;
+      const kcalSessao = kcalMedida != null ? kcalMedida : (ultimaData ? kcalMusculacaoSessao(pesoKg) : 0);
+      const kcalEhMedida = kcalMedida != null;
+
       return (
-        <div style={{ background: COLORS.panel, border: `1px solid ${COLORS.panelBorder}`, borderRadius: 16, padding: 24 }}>
-          <div>
-            <div style={{ fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: COLORS.muted, marginBottom: 4 }}>Treino</div>
-            <h2 style={{ fontSize: 22, fontWeight: 600, color: COLORS.cream, fontFamily: "'Fraunces', serif", margin: 0 }}>{titulo}</h2>
+        <div style={panelStyle}>
+          <div style={panelHeader}>
+            <div>
+              <div style={eyebrow}>Treino</div>
+              <h2 style={panelTitle}>{titulo}</h2>
+            </div>
+            {kcalSessao > 0 && (
+              <div style={{ textAlign: "right" }}>
+                <div style={{ fontSize: 20, fontWeight: 700, color: COLORS.cream, fontFamily: "'Fraunces', serif" }}>
+                  {kcalEhMedida ? "" : "~"}{kcalSessao} kcal
+                </div>
+                <div style={{ fontSize: 10, color: COLORS.muted }}>
+                  {kcalEhMedida ? "medido" : "estimado"} · {ultimaData}
+                </div>
+              </div>
+            )}
           </div>
 
           {sessoes.length === 0 ? (
-            <EmptyState text="Sem registros de treino ainda." />
+            <EmptyState text="Sem registros de treino." />
           ) : (
             <>
-              <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 16 }}>
-                {sessoes.map((s) => (
-                  <button
-                    key={s} onClick={() => trocarSessao(s)}
-                    style={{
-                      padding: "5px 12px", borderRadius: 8, border: "none",
-                      background: s === sessaoSelecionada ? COLORS.cream : "transparent",
-                      color: s === sessaoSelecionada ? COLORS.bg : COLORS.muted,
-                      fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "inherit"
-                    }}
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
+              {sessoes.length > 1 && (
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 16 }}>
+                  {sessoes.map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => trocarSessao(s)}
+                      style={{
+                        padding: "5px 12px",
+                        borderRadius: 8,
+                        border: "none",
+                        background: s === sessaoSelecionada ? COLORS.cream : "transparent",
+                        color: s === sessaoSelecionada ? COLORS.bg : COLORS.muted,
+                        fontSize: 11,
+                        fontWeight: 600,
+                        cursor: "pointer",
+                        fontFamily: "inherit",
+                      }}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              )}
 
               {nomesExercicios.length > 0 && (
                 <div style={{ marginTop: 20 }}>
-                  <div style={{ fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: COLORS.muted }}>Exercício</div>
-                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap", margin: "8px 0 16px" }}>
+                  <div style={eyebrow}>Exercício</div>
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap", margin: "8px 0 12px" }}>
                     {nomesExercicios.map((n) => (
                       <button
-                        key={n} onClick={() => setExercicioProgresso(n)}
+                        key={n}
+                        onClick={() => setExercicioProgresso(n)}
                         style={{
-                          padding: "6px 12px", borderRadius: 20,
+                          padding: "6px 12px",
+                          borderRadius: 20,
                           border: `1px solid ${n === exercicioValido ? cor : COLORS.panelBorder}`,
                           background: n === exercicioValido ? `${cor}22` : "transparent",
                           color: n === exercicioValido ? COLORS.cream : COLORS.muted,
-                          fontSize: 12, cursor: "pointer", fontFamily: "inherit"
+                          fontSize: 12,
+                          cursor: "pointer",
+                          fontFamily: "inherit",
                         }}
                       >
                         {n}
@@ -389,24 +639,34 @@
                   </div>
 
                   {cargaAtual != null && (
-                    <div style={{ marginBottom: 12 }}>
-                      <span style={{ fontSize: 24, fontWeight: 700, color: COLORS.cream, fontFamily: "'Fraunces', serif" }}>
+                    <div style={{ marginBottom: 8 }}>
+                      <span style={{ fontSize: 22, fontWeight: 700, color: COLORS.cream, fontFamily: "'Fraunces', serif" }}>
                         {cargaAtual}{unidade}
                       </span>
+                      {progresso != null && (
+                        <span style={{ fontSize: 12, color: progresso >= 0 ? cor : "#C97B63", marginLeft: 10 }}>
+                          {progresso >= 0 ? "▲" : "▼"} {Math.abs(progresso)}%
+                        </span>
+                      )}
                     </div>
                   )}
 
-                  <div style={{ height: 160 }}>
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={serieProgresso} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-                        <CartesianGrid stroke={COLORS.panelBorder} strokeDasharray="3 3" vertical={false} />
-                        <XAxis dataKey="data" stroke={COLORS.muted} fontSize={11} tickLine={false} axisLine={false} />
-                        <YAxis stroke={COLORS.muted} fontSize={11} tickLine={false} axisLine={false} unit={unidade} />
-                        <Tooltip contentStyle={{ background: COLORS.panel, border: `1px solid ${COLORS.panelBorder}`, borderRadius: 8 }} labelStyle={{ color: COLORS.cream }} />
-                        <Line type="monotone" dataKey="carga" stroke={cor} strokeWidth={2.5} dot={{ r: 4, fill: cor }} name={`Carga (${unidade})`} />
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </div>
+                  {window.Recharts && (
+                    <div style={{ height: 180 }}>
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={serieProgresso} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+                          <CartesianGrid stroke={COLORS.panelBorder} strokeDasharray="3 3" vertical={false} />
+                          <XAxis dataKey="data" stroke={COLORS.muted} fontSize={11} tickLine={false} axisLine={false} />
+                          <YAxis stroke={COLORS.muted} fontSize={11} tickLine={false} axisLine={false} unit={unidade} />
+                          <Tooltip
+                            contentStyle={{ background: COLORS.panel, border: `1px solid ${COLORS.panelBorder}`, borderRadius: 8 }}
+                            labelStyle={{ color: COLORS.cream }}
+                          />
+                          <Line type="monotone" dataKey="carga" stroke={cor} strokeWidth={2.5} dot={{ r: 4, fill: cor }} name={`Carga (${unidade})`} />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </div>
+                  )}
                 </div>
               )}
             </>
@@ -416,13 +676,16 @@
     }
 
     function CardioPanel({ titulo, dados, cor, pesoKg }) {
-      if (!window.Recharts) return null;
-
       const dias = useMemo(() => {
         const seen = [];
-        dados.forEach((d) => { if (!seen.includes(d.data)) seen.push(d.data); });
+        dados.forEach((d) => {
+          if (!seen.includes(d.data)) seen.push(d.data);
+        });
         return seen;
       }, [dados]);
+
+      const totalKcal = dados.reduce((s, d) => s + kcalCardio(d.met, pesoKg, d.minutos, d.kcalReal), 0);
+      const totalMinutos = dados.reduce((s, d) => s + d.minutos, 0);
 
       const chartData = dias.map((d) => {
         const itens = dados.filter((x) => x.data === d);
@@ -431,22 +694,42 @@
       });
 
       return (
-        <div style={{ background: COLORS.panel, border: `1px solid ${COLORS.panelBorder}`, borderRadius: 16, padding: 24 }}>
-          <div>
-            <div style={{ fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: COLORS.muted, marginBottom: 4 }}>Cardio</div>
-            <h2 style={{ fontSize: 22, fontWeight: 600, color: COLORS.cream, fontFamily: "'Fraunces', serif", margin: 0 }}>{titulo}</h2>
+        <div style={panelStyle}>
+          <div style={panelHeader}>
+            <div>
+              <div style={eyebrow}>Cardio</div>
+              <h2 style={panelTitle}>{titulo}</h2>
+            </div>
+            {totalKcal > 0 && (
+              <div style={{ textAlign: "right" }}>
+                <div style={{ fontSize: 20, fontWeight: 700, color: COLORS.cream, fontFamily: "'Fraunces', serif" }}>
+                  ~{totalKcal} kcal
+                </div>
+                <div style={{ fontSize: 10, color: COLORS.muted }}>{totalMinutos} min total</div>
+              </div>
+            )}
           </div>
 
           {dados.length === 0 ? (
-            <EmptyState text="Sem registros de cardio ainda." />
+            <EmptyState text="Sem registros de cardio." />
           ) : (
             <>
               <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 8 }}>
                 {dados.map((d, i) => (
-                  <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "12px", background: COLORS.bg, borderRadius: 8, border: `1px solid ${COLORS.panelBorder}` }}>
+                  <div
+                    key={i}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      padding: "10px 12px",
+                      background: COLORS.bg,
+                      borderRadius: 8,
+                      border: `1px solid ${COLORS.panelBorder}`,
+                    }}
+                  >
                     <div>
-                      <div style={{ fontSize: 13, color: COLORS.cream, fontWeight: 500 }}>{d.atividade}</div>
-                      <div style={{ fontSize: 11, color: COLORS.muted, marginTop: 4 }}>{d.data} · {d.minutos} min</div>
+                      <div style={{ fontSize: 13, color: COLORS.cream }}>{d.atividade}</div>
+                      <div style={{ fontSize: 11, color: COLORS.muted }}>{d.data} · {d.minutos} min</div>
                     </div>
                     <span style={{ fontSize: 13, color: cor, fontWeight: 600 }}>
                       {d.kcalReal != null ? "" : "~"}{kcalCardio(d.met, pesoKg, d.minutos, d.kcalReal)} kcal
@@ -455,14 +738,17 @@
                 ))}
               </div>
 
-              {chartData.length > 1 && (
-                <div style={{ height: 160, marginTop: 24 }}>
+              {chartData.length > 1 && window.Recharts && (
+                <div style={{ height: 160, marginTop: 20 }}>
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={chartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                       <CartesianGrid stroke={COLORS.panelBorder} strokeDasharray="3 3" vertical={false} />
                       <XAxis dataKey="data" stroke={COLORS.muted} fontSize={11} tickLine={false} axisLine={false} />
                       <YAxis stroke={COLORS.muted} fontSize={11} tickLine={false} axisLine={false} />
-                      <Tooltip contentStyle={{ background: COLORS.panel, border: `1px solid ${COLORS.panelBorder}`, borderRadius: 8 }} labelStyle={{ color: COLORS.cream }} />
+                      <Tooltip
+                        contentStyle={{ background: COLORS.panel, border: `1px solid ${COLORS.panelBorder}`, borderRadius: 8 }}
+                        labelStyle={{ color: COLORS.cream }}
+                      />
                       <Line type="monotone" dataKey="kcal" stroke={cor} strokeWidth={2.5} dot={{ r: 4, fill: cor }} name="Kcal gastas" />
                     </LineChart>
                   </ResponsiveContainer>
@@ -474,24 +760,80 @@
       );
     }
 
+    const panelStyle = {
+      background: COLORS.panel,
+      border: `1px solid ${COLORS.panelBorder}`,
+      borderRadius: 16,
+      padding: 24,
+    };
+
+    const panelHeader = { display: "flex", justifyContent: "space-between", alignItems: "flex-start" };
+
+    const eyebrow = {
+      fontSize: 11,
+      letterSpacing: "0.12em",
+      textTransform: "uppercase",
+      color: COLORS.muted,
+      marginBottom: 4,
+    };
+
+    const panelTitle = {
+      fontSize: 22,
+      fontWeight: 600,
+      color: COLORS.cream,
+      fontFamily: "'Fraunces', serif",
+      margin: 0,
+    };
+
+    function SectionLabel({ text }) {
+      return (
+        <div
+          style={{
+            fontSize: 11,
+            letterSpacing: "0.15em",
+            textTransform: "uppercase",
+            color: COLORS.muted,
+            margin: "8px 4px",
+          }}
+        >
+          {text}
+        </div>
+      );
+    }
+
     function Dashboard() {
       return (
-        <div style={{ minHeight: "100vh", padding: "40px 20px", fontFamily: "'Inter', -apple-system, sans-serif" }}>
-          <div style={{ maxWidth: 480, margin: "0 auto 32px" }}>
-            <div style={{ fontSize: 11, letterSpacing: "0.15em", textTransform: "uppercase", color: COLORS.muted }}>Painel diário</div>
-            <h1 style={{ fontFamily: "'Fraunces', serif", fontSize: 34, color: COLORS.cream, margin: "4px 0 0", fontWeight: 500 }}>Progresso</h1>
+        <div
+          style={{
+            minHeight: "100vh",
+            background: COLORS.bg,
+            padding: "32px 20px",
+            fontFamily: "'Inter', -apple-system, sans-serif",
+          }}
+        >
+          <style>{`
+            @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+          `}</style>
+
+          <div style={{ maxWidth: 480, margin: "0 auto 28px" }}>
+            <div style={{ fontSize: 11, letterSpacing: "0.15em", textTransform: "uppercase", color: COLORS.muted }}>
+              Painel diário
+            </div>
+            <h1 style={{ fontFamily: "'Fraunces', serif", fontSize: 32, color: COLORS.cream, margin: "4px 0 0" }}>
+              Progresso
+            </h1>
           </div>
 
-          <div style={{ maxWidth: 480, margin: "0 auto", display: "flex", flexDirection: "column", gap: 16 }}>
-            <div style={{ fontSize: 11, letterSpacing: "0.15em", textTransform: "uppercase", color: COLORS.muted, margin: "16px 4px 8px" }}>Você</div>
+          <div style={{ maxWidth: 480, margin: "0 auto", display: "flex", flexDirection: "column", gap: 20 }}>
+            <SectionLabel text="Você" />
             <MacrosPanel titulo="Macros" alimentos={ALIMENTOS_VOCE} meta={META_VOCE} />
-            <TreinoPanel titulo="Seu treino" dados={TREINO_VOCE} cor={COLORS.voce} pesoKg={PESO_USUARIO_KG} />
+            <TreinoPanel titulo="Seu treino" dados={TREINO_VOCE} cor={COLORS.voce} pesoKg={PESO_USUARIO_KG} pessoa="voce" />
             <CardioPanel titulo="Seu cardio" dados={CARDIO_VOCE} cor={COLORS.voce} pesoKg={PESO_USUARIO_KG} />
-            
-            <div style={{ fontSize: 11, letterSpacing: "0.15em", textTransform: "uppercase", color: COLORS.muted, margin: "32px 4px 8px" }}>Raissa</div>
-            <MacrosPanel titulo="Macros · Raissa" alimentos={ALIMENTOS_ESPOSA} meta={META_ESPOSA} />
-            <TreinoPanel titulo="Treino · Raissa" dados={TREINO_ESPOSA} cor={COLORS.esposa} pesoKg={PESO_RAISSA_KG} />
-            <CardioPanel titulo="Cardio · Raissa" dados={CARDIO_ESPOSA} cor={COLORS.esposa} pesoKg={PESO_RAISSA_KG} />
+
+            <SectionLabel text={TREINO_ESPOSA_NOME} />
+            <MacrosPanel titulo={`Macros · ${TREINO_ESPOSA_NOME}`} alimentos={ALIMENTOS_ESPOSA} meta={META_ESPOSA} />
+            <TreinoPanel titulo={`Treino · ${TREINO_ESPOSA_NOME}`} dados={TREINO_ESPOSA} cor={COLORS.esposa} pesoKg={PESO_RAISSA_KG} pessoa="esposa" />
+            <CardioPanel titulo={`Cardio · ${TREINO_ESPOSA_NOME}`} dados={CARDIO_ESPOSA} cor={COLORS.esposa} pesoKg={PESO_RAISSA_KG} />
           </div>
         </div>
       );
@@ -502,4 +844,3 @@
   </script>
 </body>
 </html>
-
