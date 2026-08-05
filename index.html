@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Progresso</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      background-color: #12110F;
+      -webkit-font-smoothing: antialiased;
+      box-sizing: border-box;
+    }
+    * { box-sizing: inherit; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useMemo } = React;
+
+    // ============================================================
+    // DADOS ATUALIZADOS (05/08 - COM ALMOÇO)
+    // ============================================================
+
+    const META_VOCE = { proteina: 160, carbo: 205, gordura: 60, kcal: 2000 };
+    const META_ESPOSA = { proteina: 110, carbo: 139, gordura: 45, kcal: 1400 };
+
+    const ALIMENTOS_VOCE = [
+      // 05/08 - Almoço
+      { data: "05/08", alimento: "Frango (120g)", proteina: 37, carbo: 0, gordura: 4.2 },
+      { data: "05/08", alimento: "Legumes crus (100g)", proteina: 1.4, carbo: 8.4, gordura: 0.2 },
+      { data: "05/08", alimento: "Aipim cozido (120g)", proteina: 0.7, carbo: 36, gordura: 0.4 },
+      { data: "05/08", alimento: "Purê de batata baroa (80g)", proteina: 0.8, carbo: 14.4, gordura: 1.6 },
+      { data: "05/08", alimento: "Salada verde (50g)", proteina: 0.7, carbo: 1.1, gordura: 0.1 },
+      { data: "05/08", alimento: "Azeite (3ml)", proteina: 0, carbo: 0, gordura: 2.8 },
+      { data: "05/08", alimento: "Couve (30g)", proteina: 0.9, carbo: 1.2, gordura: 0.1 },
+      { data: "05/08", alimento: "Bolo de cenoura c/ chocolate zero lac", proteina: 5, carbo: 42, gordura: 12 },
+      
+      // 05/08 - Café da manhã
+      { data: "05/08", alimento: "Pão francês", proteina: 4, carbo: 28, gordura: 1 },
+      { data: "05/08", alimento: "3 ovos cozidos", proteina: 19.5, carbo: 2.4, gordura: 13.4 },
+      { data: "05/08", alimento: "Melão (70g)", proteina: 0.35, carbo: 5.6, gordura: 0 },
+      { data: "05/08", alimento: "Morango (30g)", proteina: 0.18, carbo: 2.1, gordura: 0 },
+      { data: "05/08", alimento: "Chia (5g)", proteina: 0.8, carbo: 2, gordura: 1.5 },
+      { data: "05/08", alimento: "PeptiStrong (1 dose)", proteina: 2.5, carbo: 2, gordura: 0.5 },
+      { data: "05/08", alimento: "Creatina (1 dose)", proteina: 0, carbo: 0, gordura: 0 },
+      { data: "05/08", alimento: "Abacate (1/8)", proteina: 0.3, carbo: 1.5, gordura: 2.1 },
+      { data: "05/08", alimento: "SuperCoffee (1 dose)", proteina: 0.8, carbo: 3.8, gordura: 1.9 },
+      { data: "05/08", alimento: "Café preto (300ml)", proteina: 0, carbo: 0, gordura: 0 },
+      
+      // Registros anteriores
+      { data: "04/08", alimento: "Pão francês", proteina: 4, carbo: 28, gordura: 1 },
+      { data: "04/08", alimento: "3 ovos cozidos", proteina: 19.5, carbo: 2.4, gordura: 13.4 },
+      { data: "04/08", alimento: "Melão (70g)", proteina: 0.35, carbo: 5.6, gordura: 0 },
+      { data: "04/08", alimento: "Morango (30g)", proteina: 0.18, carbo: 2.1, gordura: 0 },
+      { data: "04/08", alimento: "Chia (5g)", proteina: 0.8, carbo: 2, gordura: 1.5 },
+      { data: "04/08", alimento: "Livestrong/PeptiStrong (1 dose)", proteina: 2.5, carbo: 2, gordura: 0.5 },
+      { data: "04/08", alimento: "Whey (1 scoop)", proteina: 22, carbo: 3.9, gordura: 2.3 },
+      { data: "04/08", alimento: "Peixe tilápia grelhado (85g)", proteina: 17.1, carbo: 0, gordura: 1.4 },
+      { data: "04/08", alimento: "Aipim cozido (166g)", proteina: 1, carbo: 50, gordura: 0.5 },
+      { data: "04/08", alimento: "Brownie caseiro (1/4 da receita, com whey)", proteina: 22, carbo: 22.1, gordura: 11.5 },
+      { data: "03/08", alimento: "3 ovos", proteina: 19.5, carbo: 2.4, gordura: 13.4 },
+      { data: "03/08", alimento: "Pão francês", proteina: 4, carbo: 28, gordura: 1 }
+    ];
+
+    const ALIMENTOS_ESPOSA = [
+      // 05/08 - Almoço
+      { data: "05/08", alimento: "Frango (110g)", proteina: 34.1, carbo: 0, gordura: 3.8 },
+      { data: "05/08", alimento: "Purê de batata baroa (60g)", proteina: 0.6, carbo: 10.8, gordura: 1.2 },
+      { data: "05/08", alimento: "Salada verde (50g)", proteina: 0.7, carbo: 1.1, gordura: 0.1 },
+      { data: "05/08", alimento: "Couve (30g)", proteina: 0.9, carbo: 1.2, gordura: 0.1 },
+      { data: "05/08", alimento: "Bolo de cenoura c/ chocolate zero lac", proteina: 5, carbo: 42, gordura: 12 },
+
+      // 05/08 - Café da manhã
+      { data: "05/08", alimento: "Pão francês", proteina: 4, carbo: 28, gordura: 1 },
+      { data: "05/08", alimento: "3 ovos cozidos", proteina: 19.5, carbo: 2.4, gordura: 13.4 },
+      { data: "05/08", alimento: "Melão (70g)", proteina: 0.35, carbo: 5.6, gordura: 0 },
+      { data: "05/08", alimento: "Morango (30g)", proteina: 0.18, carbo: 2.1, gordura: 0 },
+      { data: "05/08", alimento: "Chia (5g)", proteina: 0.8, carbo: 2, gordura: 1.5 },
+      { data: "05/08", alimento: "PeptiStrong (1 dose)", proteina: 2.5, carbo: 2, gordura: 0.5 },
+      { data: "05/08", alimento: "Creatina (1 dose)", proteina: 0, carbo: 0, gordura: 0 },
+      { data: "05/08", alimento: "Abacate (1/8)", proteina: 0.3, carbo: 1.5, gordura: 2.1 },
+      
+      // Registros anteriores
+      { data: "04/08", alimento: "Pão francês", proteina: 4, carbo: 28, gordura: 1 },
+      { data: "04/08", alimento: "3 ovos cozidos", proteina: 19.5, carbo: 2.4, gordura: 13.4 },
+      { data: "04/08", alimento: "Frango grelhado (110g)", proteina: 34.9, carbo: 0, gordura: 3.9 },
+      { data: "04/08", alimento: "Aipim cozido (~120g)", proteina: 0.7, carbo: 36.1, gordura: 0.4 },
+      { data: "04/08", alimento: "Body Protein Cacau (1 dose)", proteina: 15, carbo: 0, gordura: 0 },
+      { data: "03/08", alimento: "3 ovos", proteina: 19.5, carbo: 2.4, gordura: 13.4 }
+    ];
+
+    // ============================================================
+    // LÓGICA E UI
+    // ============================================================
+
+    const COLORS = {
+      bg: "#12110F", panel: "#1B1917", panelBorder: "#2C2924",
+      cream: "#F4EFE6", muted: "#9A9184",
+      protein: "#E8A458", carb: "#7FA88F", fat: "#C97B63",
+      track: "#2C2924",
+    };
+
+    function kcalFromMacro(p, c, g) {
+      return Math.round(p * 4 + c * 4 + g * 9);
+    }
+
+    function dataParaOrdenar(dataStr) {
+      const [dia, mes] = dataStr.split("/").map(Number);
+      return mes * 100 + dia;
+    }
+
+    function RingStat({ label, value, meta, unit, color }) {
+      const pct = Math.min(100, (value / meta) * 100);
+      const r = 38;
+      const circ = 2 * Math.PI * r;
+      const offset = circ - (pct / 100) * circ;
+      const over = value > meta;
+
+      return (
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+          <div style={{ position: "relative", width: 90, height: 90 }}>
+            <svg width="90" height="90" viewBox="0 0 90 90" style={{ transform: "rotate(-90deg)" }}>
+              <circle cx="45" cy="45" r={r} fill="none" stroke={COLORS.track} strokeWidth="6" />
+              <circle
+                cx="45" cy="45" r={r} fill="none"
+                stroke={over ? "#C97B63" : color} strokeWidth="6"
+                strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round"
+                style={{ transition: "stroke-dashoffset 0.6s ease" }}
+              />
+            </svg>
+            <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ fontSize: 18, fontWeight: 700, color: COLORS.cream, fontFamily: "'Fraunces', serif" }}>{value}</span>
+              <span style={{ fontSize: 10, color: COLORS.muted }}>/{meta}{unit}</span>
+            </div>
+          </div>
+          <span style={{ fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase", color: COLORS.muted }}>{label}</span>
+        </div>
+      );
+    }
+
+    function BarraContribuicao({ alimento, proteina, carbo, gordura }) {
+      const total = proteina + carbo + gordura;
+      const pP = total ? (proteina / total) * 100 : 0;
+      const pC = total ? (carbo / total) * 100 : 0;
+      const pG = total ? (gordura / total) * 100 : 0;
+      const kcal = kcalFromMacro(proteina, carbo, gordura);
+
+      return (
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+            <span style={{ fontSize: 13, color: COLORS.cream, fontWeight: 500 }}>{alimento}</span>
+            <span style={{ fontSize: 12, color: COLORS.muted }}>{kcal} kcal</span>
+          </div>
+          <div style={{ display: "flex", height: 6, borderRadius: 3, overflow: "hidden", background: COLORS.track }}>
+            {pP > 0 && <div style={{ width: `${pP}%`, background: COLORS.protein }} />}
+            {pC > 0 && <div style={{ width: `${pC}%`, background: COLORS.carb }} />}
+            {pG > 0 && <div style={{ width: `${pG}%`, background: COLORS.fat }} />}
+          </div>
+          <div style={{ display: "flex", gap: 12, marginTop: 6 }}>
+            <span style={{ fontSize: 11, color: COLORS.protein, fontWeight: 600 }}>P {proteina}g</span>
+            <span style={{ fontSize: 11, color: COLORS.carb, fontWeight: 600 }}>C {carbo}g</span>
+            <span style={{ fontSize: 11, color: COLORS.fat, fontWeight: 600 }}>G {gordura}g</span>
+          </div>
+        </div>
+      );
+    }
+
+    function MacrosPanel({ titulo, alimentos, meta }) {
+      const dias = useMemo(() => {
+        const seen = [];
+        alimentos.forEach((a) => { if (!seen.includes(a.data)) seen.push(a.data); });
+        return seen.sort((a, b) => dataParaOrdenar(a) - dataParaOrdenar(b));
+      }, [alimentos]);
+
+      const [diaSelecionado, setDiaSelecionado] = useState("05/08");
+      const diaValido = dias.includes(diaSelecionado) ? diaSelecionado : dias[dias.length - 1];
+
+      const alimentosDoDia = alimentos
+        .filter((a) => a.data === diaValido)
+        .slice()
+        .sort((a, b) => kcalFromMacro(b.proteina, b.carbo, b.gordura) - kcalFromMacro(a.proteina, a.carbo, a.gordura));
+
+      const p = alimentosDoDia.reduce((s, a) => s + a.proteina, 0);
+      const c = alimentosDoDia.reduce((s, a) => s + a.carbo, 0);
+      const g = alimentosDoDia.reduce((s, a) => s + a.gordura, 0);
+      const kcal = kcalFromMacro(p, c, g);
+
+      return (
+        <div style={{ background: COLORS.panel, border: `1px solid ${COLORS.panelBorder}`, borderRadius: 16, padding: 24 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+            <div>
+              <div style={{ fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: COLORS.muted, marginBottom: 4 }}>Nutrição</div>
+              <h2 style={{ fontSize: 22, fontWeight: 600, color: COLORS.cream, fontFamily: "'Fraunces', serif", margin: 0 }}>{titulo}</h2>
+            </div>
+            <div style={{ textAlign: "right" }}>
+              <div style={{ fontSize: 26, fontWeight: 700, color: COLORS.cream, fontFamily: "'Fraunces', serif" }}>
+                {kcal}
+                <span style={{ fontSize: 13, color: COLORS.muted, fontWeight: 400, fontFamily: "'Inter', sans-serif" }}> / {meta.kcal} kcal</span>
+              </div>
+            </div>
+          </div>
+
+          {dias.length > 0 && (
+            <>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 16 }}>
+                {dias.map((d) => (
+                  <button
+                    key={d} onClick={() => setDiaSelecionado(d)}
+                    style={{
+                      padding: "6px 14px", borderRadius: 20,
+                      border: `1px solid ${d === diaValido ? COLORS.protein : COLORS.panelBorder}`,
+                      background: d === diaValido ? `${COLORS.protein}11` : "transparent",
+                      color: d === diaValido ? COLORS.cream : COLORS.muted,
+                      fontSize: 12, fontWeight: d === diaValido ? 600 : 400,
+                      cursor: "pointer", fontFamily: "inherit", transition: "all 0.2s ease"
+                    }}
+                  >
+                    {d}
+                  </button>
+                ))}
+              </div>
+
+              <div style={{ display: "flex", justifyContent: "space-between", padding: "28px 0" }}>
+                <RingStat label="Proteína" value={Math.round(p * 10) / 10} meta={meta.proteina} unit="g" color={COLORS.protein} />
+                <RingStat label="Carboidrato" value={Math.round(c * 10) / 10} meta={meta.carbo} unit="g" color={COLORS.carb} />
+                <RingStat label="Gordura" value={Math.round(g * 10) / 10} meta={meta.gordura} unit="g" color={COLORS.fat} />
+              </div>
+
+              <div style={{ marginTop: 8 }}>
+                <div style={{ fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: COLORS.muted, marginBottom: 16 }}>Contribuição por alimento</div>
+                <div>
+                  {alimentosDoDia.map((a, i) => (
+                    <BarraContribuicao key={i} alimento={a.alimento} proteina={a.proteina} carbo={a.carbo} gordura={a.gordura} />
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      );
+    }
+
+    function Dashboard() {
+      return (
+        <div style={{ minHeight: "100vh", padding: "40px 20px", fontFamily: "'Inter', -apple-system, sans-serif" }}>
+          <div style={{ maxWidth: 480, margin: "0 auto 32px" }}>
+            <div style={{ fontSize: 11, letterSpacing: "0.15em", textTransform: "uppercase", color: COLORS.muted }}>Painel diário</div>
+            <h1 style={{ fontFamily: "'Fraunces', serif", fontSize: 34, color: COLORS.cream, margin: "4px 0 0", fontWeight: 500 }}>Progresso</h1>
+          </div>
+
+          <div style={{ maxWidth: 480, margin: "0 auto", display: "flex", flexDirection: "column", gap: 16 }}>
+            <div style={{ fontSize: 11, letterSpacing: "0.15em", textTransform: "uppercase", color: COLORS.muted, margin: "16px 4px 8px" }}>Você</div>
+            <MacrosPanel titulo="Macros" alimentos={ALIMENTOS_VOCE} meta={META_VOCE} />
+            
+            <div style={{ fontSize: 11, letterSpacing: "0.15em", textTransform: "uppercase", color: COLORS.muted, margin: "16px 4px 8px" }}>Raissa</div>
+            <MacrosPanel titulo="Macros · Raissa" alimentos={ALIMENTOS_ESPOSA} meta={META_ESPOSA} />
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<Dashboard />);
+  </script>
+</body>
+</html>
