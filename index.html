@@ -33,7 +33,7 @@
     const { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } = window.Recharts || {};
 
     // ============================================================
-    // DADOS HISTÓRICOS E ATUAIS COMPLETOS (Com os novos itens do Bruno)
+    // DADOS HISTÓRICOS E ATUAIS COMPLETOS (Adicionados novos itens para Raissa em 06/08)
     // ============================================================
 
     const META_VOCE = { proteina: 160, carbo: 205, gordura: 60, kcal: 2000 };
@@ -186,6 +186,11 @@
     ];
 
     const ALIMENTOS_ESPOSA = [
+      // 06/08 - Novos itens Raissa (Morango 30g, Abacaxi 70g, 1 scoop Body Protein ~20g)
+      { data: "06/08", alimento: "Morango (30g)", proteina: 0.2, carbo: 2.1, gordura: 0 },
+      { data: "06/08", alimento: "Abacaxi (70g)", proteina: 0.4, carbo: 8.5, gordura: 0.1 },
+      { data: "06/08", alimento: "Body Protein (1 scoop, ~20g)", proteina: 15.0, carbo: 0, gordura: 0 },
+
       // 06/08 - Almoço Raissa (Legumes ajustados para ~15g)
       { data: "06/08", alimento: "Frango grelhado (estimado ~100g)", proteina: 31.0, carbo: 0, gordura: 3.5 },
       { data: "06/08", alimento: "Batata baroa cozida (estimado ~100g)", proteina: 1.0, carbo: 20.0, gordura: 0.2 },
