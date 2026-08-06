@@ -33,13 +33,26 @@
     const { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } = window.Recharts || {};
 
     // ============================================================
-    // DADOS HISTÓRICOS E ATUAIS COMPLETOS
+    // DADOS HISTÓRICOS E ATUAIS COMPLETOS (Incluindo 06/08)
     // ============================================================
 
     const META_VOCE = { proteina: 160, carbo: 205, gordura: 60, kcal: 2000 };
     const META_ESPOSA = { proteina: 110, carbo: 139, gordura: 45, kcal: 1400 };
 
     const ALIMENTOS_VOCE = [
+      // 06/08 - Café da manhã Bruno
+      { data: "06/08", alimento: "Pão francês", proteina: 4, carbo: 28, gordura: 1 },
+      { data: "06/08", alimento: "3 ovos cozidos", proteina: 19.5, carbo: 2.4, gordura: 13.4 },
+      { data: "06/08", alimento: "Melão (25g)", proteina: 0.13, carbo: 2.0, gordura: 0 },
+      { data: "06/08", alimento: "Morango (30g)", proteina: 0.18, carbo: 2.1, gordura: 0 },
+      { data: "06/08", alimento: "Abacaxi (45g)", proteina: 0.24, carbo: 5.5, gordura: 0.05 },
+      { data: "06/08", alimento: "Chia (5g)", proteina: 0.8, carbo: 2, gordura: 1.5 },
+      { data: "06/08", alimento: "PeptiStrong (1 dose)", proteina: 2.5, carbo: 2, gordura: 0.5 },
+      { data: "06/08", alimento: "Creatina (1 dose)", proteina: 0, carbo: 0, gordura: 0 },
+      { data: "06/08", alimento: "SuperCoffee (1 dose)", proteina: 0.8, carbo: 3.8, gordura: 1.9 },
+      { data: "06/08", alimento: "Café expresso", proteina: 0, carbo: 0, gordura: 0 },
+      { data: "06/08", alimento: "Abacate (1/8)", proteina: 0.3, carbo: 1.5, gordura: 2.1 },
+
       // 05/08 - Adições extras (melão, abacaxi, body protein)
       { data: "05/08", alimento: "Melão (50g)", proteina: 0.25, carbo: 4.0, gordura: 0 },
       { data: "05/08", alimento: "Abacaxi (50g)", proteina: 0.27, carbo: 6.1, gordura: 0.05 },
@@ -151,6 +164,16 @@
     ];
 
     const ALIMENTOS_ESPOSA = [
+      // 06/08 - Café da manhã Raissa
+      { data: "06/08", alimento: "Pão francês", proteina: 4, carbo: 28, gordura: 1 },
+      { data: "06/08", alimento: "3 ovos cozidos", proteina: 19.5, carbo: 2.4, gordura: 13.4 },
+      { data: "06/08", alimento: "Melão (25g)", proteina: 0.13, carbo: 2.0, gordura: 0 },
+      { data: "06/08", alimento: "Morango (30g)", proteina: 0.18, carbo: 2.1, gordura: 0 },
+      { data: "06/08", alimento: "Abacaxi (45g)", proteina: 0.24, carbo: 5.5, gordura: 0.05 },
+      { data: "06/08", alimento: "Chia (5g)", proteina: 0.8, carbo: 2, gordura: 1.5 },
+      { data: "06/08", alimento: "PeptiStrong (1 dose)", proteina: 2.5, carbo: 2, gordura: 0.5 },
+      { data: "06/08", alimento: "Creatina (1 dose)", proteina: 0, carbo: 0, gordura: 0 },
+
       // 05/08 - Jantar / Adições Raissa (com molho de tomate e tomates cereja)
       { data: "05/08", alimento: "Frango (100g)", proteina: 31.7, carbo: 0, gordura: 3.6 },
       { data: "05/08", alimento: "Farinha de grão de bico (17g)", proteina: 3.7, carbo: 10.1, gordura: 1.1 },
