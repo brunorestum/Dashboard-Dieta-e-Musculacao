@@ -33,15 +33,20 @@
     const { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } = window.Recharts || {};
 
     // ============================================================
-    // DADOS HISTÓRICOS E ATUAIS COMPLETOS
+    // DADOS HISTÓRICOS E ATUAIS COMPLETOS (Com os novos itens da refeição e cardio de 06/08)
     // ============================================================
 
     const META_VOCE = { proteina: 160, carbo: 205, gordura: 60, kcal: 2000 };
     const META_ESPOSA = { proteina: 110, carbo: 139, gordura: 45, kcal: 1400 };
 
-    const PESO_HISTORICO_VOCE = [{ data: "06/08", peso: 70.88 }];
-
     const ALIMENTOS_VOCE = [
+      // 06/08 - Novos itens Bruno (Pão e meio com carne de patinho e molho, suco de uva, abacaxi 100g, body protein 1 scoop)
+      { data: "06/08", alimento: "1 pão e meio c/ carne de patinho e molho", proteina: 22.0, carbo: 45.0, gordura: 6.0 },
+      { data: "06/08", alimento: "Suco de uva integral", proteina: 0.5, carbo: 32.0, gordura: 0 },
+      { data: "06/08", alimento: "Abacaxi (100g)", proteina: 0.5, carbo: 12.3, gordura: 0.1 },
+      { data: "06/08", alimento: "Body Protein (1 scoop, ~20g)", proteina: 15.0, carbo: 0, gordura: 0 },
+
+      // 06/08 - Itens anteriores Bruno
       { data: "06/08", alimento: "Whey da foto (22g)", proteina: 17.3, carbo: 1.5, gordura: 0.7 },
       { data: "06/08", alimento: "Banana (1 unidade média, ~100g)", proteina: 1.4, carbo: 23.8, gordura: 0.1 },
       { data: "06/08", alimento: "Morango (30g)", proteina: 0.2, carbo: 2.1, gordura: 0 },
@@ -55,10 +60,27 @@
       { data: "06/08", alimento: "Legumes refogados/pimentão (135g)", proteina: 1.8, carbo: 8.5, gordura: 0.3 },
       { data: "06/08", alimento: "Salada verde com tomate cereja e cenoura (50g)", proteina: 0.7, carbo: 2.2, gordura: 0.1 },
       { data: "06/08", alimento: "Ovo de codorna (1 unidade, ~10g)", proteina: 1.3, carbo: 0.1, gordura: 1.1 },
-      { data: "06/08", alimento: "Azeite (3ml)", proteina: 0, carbo: 0, gordura: 2.8 }
+      { data: "06/08", alimento: "Azeite (3ml)", proteina: 0, carbo: 0, gordura: 2.8 },
+      { data: "06/08", alimento: "Pão francês", proteina: 4, carbo: 28, gordura: 1 },
+      { data: "06/08", alimento: "3 ovos cozidos", proteina: 19.5, carbo: 2.4, gordura: 13.4 },
+      { data: "06/08", alimento: "Melão (25g)", proteina: 0.13, carbo: 2.0, gordura: 0 },
+      { data: "06/08", alimento: "Morango (30g)", proteina: 0.18, carbo: 2.1, gordura: 0 },
+      { data: "06/08", alimento: "Abacaxi (45g)", proteina: 0.24, carbo: 5.5, gordura: 0.05 },
+      { data: "06/08", alimento: "Chia (5g)", proteina: 0.8, carbo: 2, gordura: 1.5 },
+      { data: "06/08", alimento: "PeptiStrong (1 dose)", proteina: 2.5, carbo: 2, gordura: 0.5 },
+      { data: "06/08", alimento: "Creatina (1 dose)", proteina: 0, carbo: 0, gordura: 0 },
+      { data: "06/08", alimento: "SuperCoffee (1 dose)", proteina: 0.8, carbo: 3.8, gordura: 1.9 },
+      { data: "06/08", alimento: "Café expresso", proteina: 0, carbo: 0, gordura: 0 },
+      { data: "06/08", alimento: "Abacate (1/8)", proteina: 0.3, carbo: 1.5, gordura: 2.1 }
     ];
 
     const ALIMENTOS_ESPOSA = [
+      // 06/08 - Novos itens Raissa (Pão e meio c/ carne de patinho e molho, suco de uva, bolo de cenoura 30g)
+      { data: "06/08", alimento: "1 pão e meio c/ carne de patinho e molho", proteina: 22.0, carbo: 45.0, gordura: 6.0 },
+      { data: "06/08", alimento: "Suco de uva integral", proteina: 0.5, carbo: 32.0, gordura: 0 },
+      { data: "06/08", alimento: "Bolo de cenoura c/ chocolate zero lac (30g)", proteina: 1.5, carbo: 12.6, gordura: 3.6 },
+
+      // 06/08 - Itens anteriores Raissa
       { data: "06/08", alimento: "Morango (30g)", proteina: 0.2, carbo: 2.1, gordura: 0 },
       { data: "06/08", alimento: "Abacaxi (70g)", proteina: 0.4, carbo: 8.5, gordura: 0.1 },
       { data: "06/08", alimento: "Body Protein (1 scoop, ~20g)", proteina: 15.0, carbo: 0, gordura: 0 },
@@ -67,7 +89,15 @@
       { data: "06/08", alimento: "Legumes refogados/pimentão (estimado ~15g)", proteina: 0.2, carbo: 1.0, gordura: 0.05 },
       { data: "06/08", alimento: "Salada verde com tomate cereja e cenoura (estimado ~40g)", proteina: 0.5, carbo: 1.8, gordura: 0.1 },
       { data: "06/08", alimento: "Ovo de codorna (1 unidade, ~10g)", proteina: 1.3, carbo: 0.1, gordura: 1.1 },
-      { data: "06/08", alimento: "Azeite (estimado ~2ml)", proteina: 0, carbo: 0, gordura: 1.8 }
+      { data: "06/08", alimento: "Azeite (estimado ~2ml)", proteina: 0, carbo: 0, gordura: 1.8 },
+      { data: "06/08", alimento: "Pão francês", proteina: 4, carbo: 28, gordura: 1 },
+      { data: "06/08", alimento: "3 ovos cozidos", proteina: 19.5, carbo: 2.4, gordura: 13.4 },
+      { data: "06/08", alimento: "Melão (25g)", proteina: 0.13, carbo: 2.0, gordura: 0 },
+      { data: "06/08", alimento: "Morango (30g)", proteina: 0.18, carbo: 2.1, gordura: 0 },
+      { data: "06/08", alimento: "Abacaxi (45g)", proteina: 0.24, carbo: 5.5, gordura: 0.05 },
+      { data: "06/08", alimento: "Chia (5g)", proteina: 0.8, carbo: 2, gordura: 1.5 },
+      { data: "06/08", alimento: "PeptiStrong (1 dose)", proteina: 2.5, carbo: 2, gordura: 0.5 },
+      { data: "06/08", alimento: "Creatina (1 dose)", proteina: 0, carbo: 0, gordura: 0 }
     ];
 
     const TREINO_VOCE = [
@@ -83,11 +113,12 @@
     const TREINO_ESPOSA_NOME = "Raissa";
     const TREINO_ESPOSA = [];
 
+    // Cardio Bruno (Adicionado esteira 22 min a 6 km/h em 06/08, MET 5.8)
     const CARDIO_VOCE = [
       { data: "04/08", atividade: "Esteira (Life Fitness, 3.27mi, MET 7.2)", minutos: 46.4, met: 7.2, kcalReal: 426 },
+      { data: "06/08", atividade: "Esteira (6 km/h)", minutos: 22, met: 5.8 },
     ];
     
-    // Atualizado com os novos dados da Raissa
     const CARDIO_ESPOSA = [
       { data: "05/08", atividade: "Esteira (4,5 km/h)", minutos: 45, met: 3.5 },
       { data: "06/08", atividade: "Esteira (5,5 km/h)", minutos: 30, met: 5.3 },
@@ -122,10 +153,6 @@
     function dataParaOrdenar(dataStr) {
       const [dia, mes] = dataStr.split("/").map(Number);
       return mes * 100 + dia;
-    }
-
-    function kcalMusculacaoSessao(pesoKg, horas = 1) {
-      return Math.round(4.5 * pesoKg * horas);
     }
 
     function RingStat({ label, value, meta, unit, color }) {
@@ -290,29 +317,15 @@
 
     function EmptyState({ text }) {
       return (
-        <div
-          style={{
-            padding: "40px 20px",
-            textAlign: "center",
-            color: COLORS.muted,
-            fontSize: 13,
-            border: `1px dashed ${COLORS.panelBorder}`,
-            borderRadius: 10,
-            marginTop: 12,
-          }}
-        >
+        <div style={{ padding: "40px 20px", textAlign: "center", color: COLORS.muted, fontSize: 13, border: `1px dashed ${COLORS.panelBorder}`, borderRadius: 10, marginTop: 12 }}>
           {text}
         </div>
       );
     }
 
-    function TreinoPanel({ titulo, dados, cor, pesoKg }) {
+    function TreinoPanel({ titulo, dados }) {
       const sessoes = useMemo(() => Array.from(new Set(dados.map((d) => d.sessao || "Geral"))), [dados]);
       const [sessaoSelecionada, setSessaoSelecionada] = useState(sessoes[0] || null);
-      
-      const dadosDaSessao = dados.filter((d) => (d.sessao || "Geral") === sessaoSelecionada);
-      const nomesExercicios = Array.from(new Set(dadosDaSessao.map((d) => d.exercicio)));
-      const [exercicioProgresso, setExercicioProgresso] = useState(nomesExercicios[0] || null);
 
       return (
         <div style={panelStyle}>
@@ -323,15 +336,13 @@
             </div>
           </div>
           {sessoes.length === 0 ? <EmptyState text="Sem registros de treino." /> : (
-            <>
-              {sessoes.length > 1 && (
-                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 16 }}>
-                  {sessoes.map((s) => (
-                    <button key={s} onClick={() => setSessaoSelecionada(s)} style={{ padding: "5px 12px", borderRadius: 8, border: "none", background: s === sessaoSelecionada ? COLORS.cream : "transparent", color: s === sessaoSelecionada ? COLORS.bg : COLORS.muted, fontSize: 11, fontWeight: 600, cursor: "pointer" }}>{s}</button>
-                  ))}
-                </div>
-              )}
-            </>
+            sessoes.length > 1 && (
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 16 }}>
+                {sessoes.map((s) => (
+                  <button key={s} onClick={() => setSessaoSelecionada(s)} style={{ padding: "5px 12px", borderRadius: 8, border: "none", background: s === sessaoSelecionada ? COLORS.cream : "transparent", color: s === sessaoSelecionada ? COLORS.bg : COLORS.muted, fontSize: 11, fontWeight: 600, cursor: "pointer" }}>{s}</button>
+                ))}
+              </div>
+            )
           )}
         </div>
       );
